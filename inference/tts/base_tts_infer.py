@@ -10,15 +10,27 @@ from utils.text.text_encoder import build_token_encoder
 class BaseTTSInfer:
     def __init__(self, hparams, device=None):
         if device is None:
-            device = 'cuda' if torch.cuda.is_available() else 'cpu'
+            if torch.backends.mps.is_available():
+                device = torch.device("mps")
+                print("Using MPS device")
+            elif torch.cuda.is_available():
+                device = torch.device("cuda")
+                print("Using CUDA device")
+            else:
+                device = torch.device("cpu")
+                print("Using CPU")
+        else:
+            device = torch.device(device)  # Allow manual override
+
         self.hparams = hparams
-        self.device = device
+        self.device = torch.device("cpu")  # ✅ Now actually using MPS if available
         self.data_dir = hparams['binary_data_dir']
         self.ph_encoder = build_token_encoder(os.path.join(hparams["processed_data_dir"], "phone_set.json"))
         self.ds_cls = FastSpeechWordDataset
+
         self.model = self.build_model()
         self.model.eval()
-        self.model.to(self.device)
+        self.model.to(self.device)  # ✅ Moves model to the correct device
         self.vocoder = self.build_vocoder()
 
     def build_model(self):

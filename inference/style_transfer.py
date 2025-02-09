@@ -156,7 +156,7 @@ class StyleTransfer(BaseTTSInfer):
     def example_run(cls):
 
         set_hparams()
-        
+               
         inp = {
             # 'text_gen': ,
             # 'note_gen': ,
@@ -169,7 +169,7 @@ class StyleTransfer(BaseTTSInfer):
             # 'ref_audio': ,
             # 'ph_durs':
             'ref_name':"English#EN-Alto-2#Mixed_Voice_and_Falsetto#A Thousand Years#Control_Group#0002",
-            'gen_name': "Chinese#ZH-Alto-1#Mixed_Voice_and_Falsetto#一次就好#Mixed_Voice_Group#0001",
+            'gen_name': "English#EN-Alto-2#Mixed_Voice_and_Falsetto#A Thousand Years#Control_Group#0003",
         }
         
         # use info in metadata.json
@@ -198,6 +198,8 @@ class StyleTransfer(BaseTTSInfer):
         os.makedirs('infer_out', exist_ok=True)
         save_wav(wav_out, f'infer_out/transfer.wav', hp['audio_sample_rate'])
 
+        
+        
 
 if __name__ == '__main__':
     StyleTransfer.example_run()
